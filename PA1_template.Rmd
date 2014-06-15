@@ -14,7 +14,6 @@ plot(actaggr$Group.1,actaggr$x,type="h")
 ```
 
 ## summary information for datafile
-
 ```{r}
 summary(actaggr$x)
 plot(act$interval,act$steps, plot="l")
@@ -48,6 +47,5 @@ actaggr<-aggregate(act$steps,by=list(act$date,act$day), FUN=sum)
 # plotting data for weekend and weekdays
 library(lattice)
 xyplot(x~Group.1|Group.2, data=actaggr,type="l",xlab="Interval",ylab="steps")
-
 
 ```
