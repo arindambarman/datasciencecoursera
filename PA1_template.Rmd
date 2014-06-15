@@ -5,13 +5,49 @@ This is an R Markdown document. Markdown is a simple formatting syntax for autho
 
 When you click the **Knit HTML** button a web page will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
+## Loading and preprocessing the data
 ```{r}
-summary(cars)
+act<-data.frame(read.csv("C:/Users/arindam/Documents/Data Science/R Programming/Assignment Reproduceable Research/activity.csv",colClasses = c("numeric", "Date", "numeric")))
+actaggr<-aggregate(act$steps,by=list(act$date), FUN=sum,na.rm=TRUE)
+plot(actaggr$Group.1,actaggr$x,type="h")
+
 ```
 
-You can also embed plots, for example:
+## summary information for datafile
 
 ```{r fig.width=7, fig.height=6}
-plot(cars)
+summary(actaggr$x)
+plot(act$interval,act$steps, plot="l")
 ```
+## Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps
+```{r}
+maxstep<-aggregate(act$steps, by=list(act$interval),FUN=sum,na.rm=TRUE)
+max(maxstep$x)
+subset(maxstep, x=="10927")
 
+
+```
+##  Count NA values & Imputing missing values-() strategy to fill the missin NA values with mean of all steps)
+```{r}
+sum(is.na(act$steps))
+act[is.na(act)]<-mean(act$steps)
+
+## Reporting daily aggregate steps and mean 
+actaggr<-aggregate(act$steps,by=list(act$date), mean)
+
+## Reporting daily aggregate steps and median 
+actaggr<-aggregate(act$steps,by=list(act$date), median)
+
+## plotting daily data in histogram
+actaggr<-aggregate(act$steps,by=list(act$date), FUN=sum)
+plot(actaggr$Group.1,actaggr$x,type="h")
+
+## Are there differences in activity patterns between weekdays and weekends?
+act$day <- factor(ifelse(as.POSIXlt(act$date)$wday %% 6 == 0, "Weekend", "Weekday"))
+actaggr<-aggregate(act$steps,by=list(act$date,act$day), FUN=sum)
+# plotting data for weekend and weekdays
+library(lattice)
+xyplot(x~Group.1|Group.2, data=actaggr,type="l",xlab="Interval",ylab="steps")
+
+
+```
