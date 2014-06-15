@@ -15,7 +15,7 @@ plot(actaggr$Group.1,actaggr$x,type="h")
 
 ## summary information for datafile
 
-```{r fig.width=7, fig.height=6}
+```{r}
 summary(actaggr$x)
 plot(act$interval,act$steps, plot="l")
 ```
